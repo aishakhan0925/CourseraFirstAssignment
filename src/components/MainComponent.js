@@ -12,6 +12,7 @@ import Contact from "./ContactComponent";
 import Header from "./Header";
 import Footer from "./Footer";
 import DishDetail from "./DishDetail";
+import About from "./AboutComponent";
 class Main extends Component {
   constructor(props) {
     super(props);
@@ -21,7 +22,6 @@ class Main extends Component {
       promotions: PROMOTIONS,
       leaders: LEADERS,
       comments: COMMENTS,
-      // selectedDish: null,
     };
   }
 
@@ -60,11 +60,16 @@ class Main extends Component {
             component={() => <Menu dishes={this.state.dishes} />}
           />
           <Route path="/menu/:dishId" component={DishWithId} />
+          <Route
+            exact
+            path="/aboutus"
+            component={() => <About leader={this.state.leaders} />}
+          />
 
-          <Route path="/contactus" component={Contact} />
+          <Route exact path="/contactus" component={Contact} />
 
           <Redirect to="/home" />
-        </Switch>
+        </Switch> 
 
         <Footer />
       </div>
