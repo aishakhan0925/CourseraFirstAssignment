@@ -6,7 +6,7 @@ import {
   FormGroup,
   Col,
   Label,
-  InputGroup,
+  FormFeedback,
   Button,
   Input,
 } from "reactstrap";
@@ -24,10 +24,17 @@ class Contact extends Component {
       agree: false,
       contactType: "Tel.",
       message: "",
+      touched: {
+        firstname: false,
+        lastname: false,
+        telnum: false,
+        email: false,
+      },
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleBlur = this.handleBlur.bind(this);
   }
   handleInputChange(event) {
     const target = event.target;
@@ -44,8 +51,49 @@ class Contact extends Component {
     alert("Current State is: " + JSON.stringify(this.state));
     event.preventDefault();
   }
+  handleBlur = (field) => (evt) => {
+    this.setState({
+      touched: { ...this.state.touched, [field]: true },
+    });
+  };
+  validate(firstname, lastname, telnum, email) {
+    const errors = {
+      firstname: "",
+      lastname: "",
+      telnum: "",
+      email: "",
+    };
+    //FirstName Validation
+    if (this.state.touched.firstname && firstname.length <= 3)
+      errors.firstname = "Name Should be Greater than Three latters!";
+    else if (this.state.touched.firstname && firstname.length >= 10)
+      errors.firstname = "Name Should be Lasser than Ten latters!";
+    //LastNam Validation
+    if (this.state.touched.lastname && lastname.length <= 3)
+      errors.lastname = "Name Should be Greater than Three latters!";
+    else if (this.state.touched.lastname && lastname.length >= 10)
+      errors.lastname = "Name Should be Lasser than Ten latters!";
+    //tel.Num Validation
+    const reg = /^\+d$/;
+    if (this.state.touched.telnum != reg && telnum.length === 11)
+      errors.telnum =
+        "Tel. No should contain  only Numbers! and 11 Digits Must";
+    //Email Validation
+    if (
+      this.state.touched.email &&
+      email.split("").filter((x) => x === "@").length != 1
+    )
+      errors.email = "Email Shoukd Contain '@' !";
+    return errors;
+  }
 
   render() {
+    const errors = this.validate(
+      this.state.firstname,
+      this.state.lastname,
+      this.state.telnum,
+      this.state.email
+    );
     return (
       <div className="container">
         <div className="row">
@@ -124,8 +172,12 @@ class Contact extends Component {
                     placeholder="First Name"
                     value={this.state.firstname}
                     onChange={this.handleInputChange}
+                    onBlur={this.handleBlur("firstname")}
+                    valid={errors.firstname === " "}
+                    invalid={errors.firstname != " "}
                   />
                 </Col>
+                <FormFeedback>{errors.firstname}</FormFeedback>
               </FormGroup>
               <FormGroup row>
                 <Label htmlFor="lastname" md={2}>
@@ -139,8 +191,12 @@ class Contact extends Component {
                     placeholder="Last Name"
                     value={this.state.lastname}
                     onChange={this.handleInputChange}
+                    onBlur={this.handleBlur("lastname")}
+                    valid={errors.lastname === " "}
+                    invalid={errors.lastname != " "}
                   />
                 </Col>
+                <FormFeedback>{errors.lastname}</FormFeedback>
               </FormGroup>
               <FormGroup row>
                 <Label htmlFor="telnum" md={2}>
@@ -154,8 +210,12 @@ class Contact extends Component {
                     placeholder="Tel. number"
                     value={this.state.telnum}
                     onChange={this.handleInputChange}
+                    onBlur={this.handleBlur("telnum")}
+                    valid={errors.telnum === " "}
+                    invalid={errors.telnum != " "}
                   />
                 </Col>
+                <FormFeedback>{errors.telnum}</FormFeedback>
               </FormGroup>
               <FormGroup row>
                 <Label htmlFor="email" md={2}>
@@ -169,8 +229,12 @@ class Contact extends Component {
                     placeholder="Email"
                     value={this.state.email}
                     onChange={this.handleInputChange}
+                    onBlur={this.handleBlur("email")}
+                    valid={errors.email === " "}
+                    invalid={errors.email != " "}
                   />
                 </Col>
+                <FormFeedback>{errors.email}</FormFeedback>
               </FormGroup>
               <FormGroup row>
                 <Col md={{ size: 6, offset: 2 }}>
