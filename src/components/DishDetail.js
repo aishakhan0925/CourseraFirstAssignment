@@ -9,6 +9,8 @@ import {
   CardText,
 } from "reactstrap";
 import { Link } from "react-router-dom";
+import CommentForm from "./CommentFormComponent";
+
 class DishDetail extends Component {
   renderDish(dish) {
     if (dish != null) {
@@ -78,6 +80,7 @@ class DishDetail extends Component {
             </div>
             <div className="col-12 col-md-5 m-1">
               {this.renderComents(this.props.comments)}
+              <CommentForm />
             </div>
           </div>
         </div>
